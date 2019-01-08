@@ -6,9 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DevcontactApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DevcontactApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DevcontactApplication.class, args);
+    }
 
 }
-
