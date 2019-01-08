@@ -96,4 +96,12 @@ public class ContactDetail extends AuditModel implements Serializable {
         this.photo = photo;
     }
 
+    public DeveloperCategory getDeveloperCategory() {
+        return developerCategory;
+    }
+
+    public void setDeveloperCategory(DeveloperCategory developerCategory) {
+        this.developerCategory = developerCategory;
+    }
+
 }
