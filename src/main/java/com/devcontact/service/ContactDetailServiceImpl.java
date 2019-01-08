@@ -11,11 +11,13 @@ import com.devcontact.repositories.ContactDetailRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Bruno
  */
+@Service
 public class ContactDetailServiceImpl implements ContactDetailService {
 
     @Autowired

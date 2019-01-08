@@ -22,8 +22,10 @@ public enum DeveloperCategory {
     DeveloperCategory(String category) {
         this.category = category;
     }
+    
+    
 
-    public String role() {
+    public String category() {
         return category;
     }
 }
