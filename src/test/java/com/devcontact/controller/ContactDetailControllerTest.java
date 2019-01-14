@@ -6,7 +6,7 @@
 package com.devcontact.controller;
 
 import com.devcontact.ApiResponse;
-import com.devcontact.rest.model.ContactDetailRest;
+import com.devcontact.rest.model.ContactDetailRequest;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -53,14 +53,14 @@ public class ContactDetailControllerTest {
      */
     @Test
     public void testRegister() {
-        ContactDetailRest contactDetailRest = new ContactDetailRest();
+        ContactDetailRequest contactDetailRest = new ContactDetailRequest();
         contactDetailRest.setDeveloperCategory("Frontend Developer");
         contactDetailRest.setEmail("oookafor@gmail.com");
         contactDetailRest.setFirstName("Bruno");
         contactDetailRest.setLastName("Okafor");
         contactDetailRest.setSkypeId("ookafor");
 
-        ResponseEntity<ApiResponse<ContactDetailRest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
+        ResponseEntity<ApiResponse<ContactDetailRequest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
 
         HttpEntity<Object> contactDetail = getHttpEntity(contactDetailRest);
         ResponseEntity<Object> response = template.postForEntity(
@@ -72,14 +72,14 @@ public class ContactDetailControllerTest {
 
     @Test
     public void testRegisterContactDetailExist() {
-        ContactDetailRest contactDetailRest = new ContactDetailRest();
+        ContactDetailRequest contactDetailRest = new ContactDetailRequest();
         contactDetailRest.setDeveloperCategory("Frontend Developer");
         contactDetailRest.setEmail("oookafor@gmail.com");
         contactDetailRest.setFirstName("Bruno");
         contactDetailRest.setLastName("Okafor");
         contactDetailRest.setSkypeId("ookafor");
 
-        ResponseEntity<ApiResponse<ContactDetailRest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.BAD_REQUEST);
+        ResponseEntity<ApiResponse<ContactDetailRequest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.BAD_REQUEST);
 
         HttpEntity<Object> contactDetail = getHttpEntity(contactDetailRest);
         ResponseEntity<Object> response = template.postForEntity(
@@ -94,7 +94,7 @@ public class ContactDetailControllerTest {
 //     */
     @Test
     public void testUpdate() {
-        ContactDetailRest contactDetailRest = new ContactDetailRest();
+        ContactDetailRequest contactDetailRest = new ContactDetailRequest();
         contactDetailRest.setDeveloperCategory("Frontend Developer");
         contactDetailRest.setEmail("oookafor@gmail.com");
         contactDetailRest.setFirstName("Bruno");
@@ -102,7 +102,7 @@ public class ContactDetailControllerTest {
         contactDetailRest.setSkypeId("brunokafor");
         contactDetailRest.setId(2L);
 
-        ResponseEntity<ApiResponse<ContactDetailRest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
+        ResponseEntity<ApiResponse<ContactDetailRequest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
 
         HttpEntity<Object> contactDetail = getHttpEntity(contactDetailRest);
         ResponseEntity<Object> response = template.postForEntity(
@@ -116,10 +116,10 @@ public class ContactDetailControllerTest {
 //     */
     @Test
     public void testDeactivate() {
-        ContactDetailRest contactDetailRest = new ContactDetailRest();
+        ContactDetailRequest contactDetailRest = new ContactDetailRequest();
         contactDetailRest.setId(2L);
 
-        ResponseEntity<ApiResponse<ContactDetailRest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
+        ResponseEntity<ApiResponse<ContactDetailRequest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
 
         HttpEntity<Object> contactDetail = getHttpEntity(contactDetailRest);
         ResponseEntity<Object> response = template.postForEntity(
@@ -133,10 +133,10 @@ public class ContactDetailControllerTest {
 //     */
     @Test
     public void testDelete() {
-        ContactDetailRest contactDetailRest = new ContactDetailRest();
+        ContactDetailRequest contactDetailRest = new ContactDetailRequest();
         contactDetailRest.setId(2L);
 
-        ResponseEntity<ApiResponse<ContactDetailRest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
+        ResponseEntity<ApiResponse<ContactDetailRequest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
 
         HttpEntity<Object> contactDetail = getHttpEntity(contactDetailRest);
         ResponseEntity<Object> response = template.postForEntity(
@@ -150,7 +150,7 @@ public class ContactDetailControllerTest {
 //     */
     @Test
     public void testGetContactByCategory() {
-        ResponseEntity<ApiResponse<ContactDetailRest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
+        ResponseEntity<ApiResponse<ContactDetailRequest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
         ResponseEntity<?> response = template.getForEntity(
                 "/devcontact/api/contactDetail/getContactByCategory?category=Frontend Developer", Object.class);
         assertEquals(expResult.getStatusCode(), response.getStatusCode());
@@ -161,7 +161,7 @@ public class ContactDetailControllerTest {
 //     */
     @Test
     public void testGetContactByEmail() {
-        ResponseEntity<ApiResponse<ContactDetailRest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
+        ResponseEntity<ApiResponse<ContactDetailRequest>> expResult = new ResponseEntity<>(new ApiResponse<>(), HttpStatus.OK);
         ResponseEntity<?> response = template.getForEntity(
                 "/devcontact/api/contactDetail/getContactByEmail?email=brunoo.okafor@gmail.com", Object.class);
         assertEquals(expResult.getStatusCode(), response.getStatusCode());

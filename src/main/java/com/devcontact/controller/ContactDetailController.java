@@ -9,7 +9,8 @@ import com.devcontact.ApiResponse;
 import com.devcontact.entity.model.ContactDetail;
 import com.devcontact.entity.model.DeveloperCategory;
 import com.devcontact.exceptions.ResourceException;
-import com.devcontact.rest.model.ContactDetailRest;
+import com.devcontact.rest.model.ContactDetailRequest;
+import com.devcontact.rest.model.ContactDetailResponse;
 import com.devcontact.service.ContactDetailService;
 import java.util.List;
 import java.util.Optional;
@@ -37,13 +38,13 @@ public class ContactDetailController {
     private ContactDetailService contactDetailService;
 
     @PostMapping(path = "/register", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<ApiResponse<ContactDetailRest>> register(@RequestBody ContactDetailRest contactDetailRest) {
+    public ResponseEntity<ApiResponse<ContactDetailResponse>> register(@RequestBody ContactDetailRequest contactDetailRequest) {
 
-        if (StringUtils.isEmpty(contactDetailRest.getEmail()) || StringUtils.isEmpty(contactDetailRest.getDeveloperCategory())) {
+        if (StringUtils.isEmpty(contactDetailRequest.getEmail()) || StringUtils.isEmpty(contactDetailRequest.getDeveloperCategory())) {
             throw new ResourceException("Missing required details.");
         }
 
-        String contactEmail = contactDetailRest.getEmail();
+        String contactEmail = contactDetailRequest.getEmail();
         Optional<ContactDetail> optContactDetail = contactDetailService.getContactDetailByEmail(contactEmail);
 
         if (optContactDetail.isPresent()) {
@@ -52,21 +53,23 @@ public class ContactDetailController {
 
         ContactDetail contactDetail = new ContactDetail();
         contactDetail.setActive(Boolean.TRUE);
-        DeveloperCategory developerCategory = Stream.of(DeveloperCategory.values()).filter(d -> d.category().equalsIgnoreCase(contactDetailRest.getDeveloperCategory())).findFirst().get();
+        DeveloperCategory developerCategory = Stream.of(DeveloperCategory.values()).filter(d -> d.category().equalsIgnoreCase(contactDetailRequest.getDeveloperCategory())).findFirst().get();
         contactDetail.setDeveloperCategory(developerCategory);
         contactDetail.setEmail(contactEmail);
-        contactDetail.setFirstName(contactDetailRest.getFirstName());
-        contactDetail.setLastName(contactDetailRest.getLastName());
-        contactDetail.setMailingAddress(contactDetailRest.getMailingAddress());
-        contactDetail.setPhoneNumber(contactDetailRest.getPhoneNumber());
-        contactDetail.setSkypeId(contactDetailRest.getSkypeId());
+        contactDetail.setFirstName(contactDetailRequest.getFirstName());
+        contactDetail.setLastName(contactDetailRequest.getLastName());
+        contactDetail.setMailingAddress(contactDetailRequest.getMailingAddress());
+        contactDetail.setPhoneNumber(contactDetailRequest.getPhoneNumber());
+        contactDetail.setSkypeId(contactDetailRequest.getSkypeId());
 
         try {
             contactDetailService.registerContactDetail(contactDetail);
-            ApiResponse<ContactDetailRest> apiResponse = new ApiResponse<>();
+            ApiResponse<ContactDetailResponse> apiResponse = new ApiResponse<>();
             apiResponse.setStatus("Success");
             apiResponse.setMessage("Contact detail registered successfully");
-            apiResponse.setData(contactDetailRest);
+            ContactDetailResponse response = new ContactDetailResponse();
+            response.setId(contactDetail.getId());
+            apiResponse.setData(response);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResourceException(e.getMessage());
@@ -74,13 +77,13 @@ public class ContactDetailController {
     }
 
     @PostMapping(path = "/update", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<ApiResponse<ContactDetailRest>> update(@RequestBody ContactDetailRest contactDetailRest) {
+    public ResponseEntity<ApiResponse<ContactDetailResponse>> update(@RequestBody ContactDetailRequest contactDetailRequest) {
 
-        if (StringUtils.isEmpty(contactDetailRest.getDeveloperCategory()) || StringUtils.isEmpty(contactDetailRest.getId())) {
+        if (StringUtils.isEmpty(contactDetailRequest.getDeveloperCategory()) || StringUtils.isEmpty(contactDetailRequest.getId())) {
             throw new ResourceException("Missing required details.");
         }
 
-        Long id = contactDetailRest.getId();
+        Long id = contactDetailRequest.getId();
         Optional<ContactDetail> optContactDetail = contactDetailService.getContactDetailyId(id);
 
         if (!optContactDetail.isPresent()) {
@@ -88,20 +91,22 @@ public class ContactDetailController {
         }
 
         ContactDetail contactDetail = optContactDetail.get();
-        DeveloperCategory developerCategory = Stream.of(DeveloperCategory.values()).filter(d -> d.category().equalsIgnoreCase(contactDetailRest.getDeveloperCategory())).findFirst().get();
+        DeveloperCategory developerCategory = Stream.of(DeveloperCategory.values()).filter(d -> d.category().equalsIgnoreCase(contactDetailRequest.getDeveloperCategory())).findFirst().get();
         contactDetail.setDeveloperCategory(developerCategory);
-        contactDetail.setFirstName(contactDetailRest.getFirstName());
-        contactDetail.setLastName(contactDetailRest.getLastName());
-        contactDetail.setMailingAddress(contactDetailRest.getMailingAddress());
-        contactDetail.setPhoneNumber(contactDetailRest.getPhoneNumber());
-        contactDetail.setSkypeId(contactDetailRest.getSkypeId());
+        contactDetail.setFirstName(contactDetailRequest.getFirstName());
+        contactDetail.setLastName(contactDetailRequest.getLastName());
+        contactDetail.setMailingAddress(contactDetailRequest.getMailingAddress());
+        contactDetail.setPhoneNumber(contactDetailRequest.getPhoneNumber());
+        contactDetail.setSkypeId(contactDetailRequest.getSkypeId());
 
         try {
             contactDetailService.registerContactDetail(contactDetail);
-            ApiResponse<ContactDetailRest> apiResponse = new ApiResponse<>();
+            ApiResponse<ContactDetailResponse> apiResponse = new ApiResponse<>();
             apiResponse.setStatus("Success");
             apiResponse.setMessage("Contact detail updated successfully");
-            apiResponse.setData(contactDetailRest);
+            ContactDetailResponse response = new ContactDetailResponse();
+            response.setId(contactDetail.getId());
+            apiResponse.setData(response);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResourceException(e.getMessage());
@@ -109,13 +114,13 @@ public class ContactDetailController {
     }
 
     @PostMapping(path = "/deactivate", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<ApiResponse<ContactDetailRest>> deactivate(@RequestBody ContactDetailRest contactDetailRest) {
+    public ResponseEntity<ApiResponse<ContactDetailResponse>> deactivate(@RequestBody ContactDetailRequest contactDetailRequest) {
 
-        if (StringUtils.isEmpty(contactDetailRest.getId())) {
+        if (StringUtils.isEmpty(contactDetailRequest.getId())) {
             throw new ResourceException("Missing required details.");
         }
 
-        Long id = contactDetailRest.getId();
+        Long id = contactDetailRequest.getId();
         Optional<ContactDetail> optContactDetail = contactDetailService.getContactDetailyId(id);
 
         if (!optContactDetail.isPresent()) {
@@ -127,10 +132,10 @@ public class ContactDetailController {
 
         try {
             contactDetailService.registerContactDetail(contactDetail);
-            ApiResponse<ContactDetailRest> apiResponse = new ApiResponse<>();
+            ApiResponse<ContactDetailResponse> apiResponse = new ApiResponse<>();
             apiResponse.setStatus("Success");
             apiResponse.setMessage("Contact detail deactivated successfully");
-            apiResponse.setData(contactDetailRest);
+            apiResponse.setData(null);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResourceException(e.getMessage());
@@ -138,13 +143,13 @@ public class ContactDetailController {
     }
 
     @PostMapping(path = "/delete", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<ApiResponse<ContactDetailRest>> delete(@RequestBody ContactDetailRest contactDetailRest) {
+    public ResponseEntity<ApiResponse<ContactDetailResponse>> delete(@RequestBody ContactDetailRequest contactDetailRequest) {
 
-        if (StringUtils.isEmpty(contactDetailRest.getId())) {
+        if (StringUtils.isEmpty(contactDetailRequest.getId())) {
             throw new ResourceException("Missing required details.");
         }
 
-        Long id = contactDetailRest.getId();
+        Long id = contactDetailRequest.getId();
         Optional<ContactDetail> optContactDetail = contactDetailService.getContactDetailyId(id);
 
         if (!optContactDetail.isPresent()) {
@@ -155,10 +160,10 @@ public class ContactDetailController {
 
         try {
             contactDetailService.deleteContactDetail(contactDetail);
-            ApiResponse<ContactDetailRest> apiResponse = new ApiResponse<>();
+            ApiResponse<ContactDetailResponse> apiResponse = new ApiResponse<>();
             apiResponse.setStatus("Success");
             apiResponse.setMessage("Contact detail deleted successfully");
-            apiResponse.setData(contactDetailRest);
+            apiResponse.setData(null);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResourceException(e.getMessage());
@@ -177,7 +182,11 @@ public class ContactDetailController {
             List<ContactDetail> contactDetails = contactDetailService.getContactDetailByDeveloperCategory(developerCategory);
             ApiResponse<List<ContactDetail>> apiResponse = new ApiResponse<>();
             apiResponse.setStatus("Success");
-            apiResponse.setMessage("Contact detail retrieved successfully");
+            if (contactDetails.size() > 0) {
+                apiResponse.setMessage("Data retrieved successfully");
+            } else {
+                apiResponse.setMessage("No data available");
+            }
             apiResponse.setData(contactDetails);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (Exception e) {
@@ -195,8 +204,13 @@ public class ContactDetailController {
         try {
             Optional<ContactDetail> contactDetails = contactDetailService.getContactDetailByEmail(email);
             ApiResponse<ContactDetail> apiResponse = new ApiResponse<>();
-            apiResponse.setStatus("Success");
-            apiResponse.setMessage("Contact detail retrieved successfully");
+            if (contactDetails.isPresent()) {
+                apiResponse.setStatus("Success");
+                apiResponse.setMessage("Contact detail retrieved successfully");
+            }else{
+                apiResponse.setStatus("Failure");
+                apiResponse.setMessage("Contact detail not retrieved");
+            }
             apiResponse.setData(contactDetails.orElse(null));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
         } catch (Exception e) {

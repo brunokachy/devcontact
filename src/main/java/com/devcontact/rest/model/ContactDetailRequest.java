@@ -9,7 +9,7 @@ package com.devcontact.rest.model;
  *
  * @author Bruno
  */
-public class ContactDetailRest {
+public class ContactDetailRequest {
 
     private Long id;
 
